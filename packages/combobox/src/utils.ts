@@ -183,26 +183,29 @@ export interface Chunk {
 }
 
 /**
- * Accepts an object with primary text, secondary text and key
- * Removes the key, and combines the primary text and secondary text
+ * Accepts a generic objects
+ * Removes the key or id in the object
  *
- * @return String of combined primary text and secondary text
+ * @return String of searchable text
  */
 export function convertobjectToSearchableString(
   valueObject: ComboboxObjectValue
 ) {
-  const notAllowedkeys = ["key"];
-  const combinedPrimaryAndSecondaryText = Object.keys(valueObject)
-    .filter((key) => !notAllowedkeys.includes(key))
-    .reduce((obj, key) => {
-      return obj.concat(" ", (valueObject as any)[key]);
-    }, "");
-  return combinedPrimaryAndSecondaryText;
+  const notAllowedkeys = ["key", "id"];
+  const searchWords = Object.entries(valueObject)
+    .map((eachArray) => {
+      if (!notAllowedkeys.includes(eachArray[0])) {
+        return eachArray[1];
+      }
+    })
+    .join(" ");
+
+  return searchWords;
 }
 /**
  * Accepts an object or a string
  *
- * @return String of searchable primary and secondary text
+ * @return String of searchable text
  */
 export function checkTypeOfInput(value: ComboboxObjectValue | string) {
   if (typeof value === "string") {

@@ -1367,11 +1367,10 @@ interface InternalComboboxContextValue {
 type Transition = (event: MachineEventType, payload?: any) => any;
 
 export interface ComboboxObjectValue {
-  key: string | number;
-  primaryText: string;
-  secondaryText: string;
+  [prop: string]: string | number;
 }
-type ComboboxValue = string | ComboboxObjectValue;
+
+export type ComboboxValue = string | ComboboxObjectValue;
 
 type State = "IDLE" | "SUGGESTING" | "NAVIGATING" | "INTERACTING";
 
