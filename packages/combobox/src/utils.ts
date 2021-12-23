@@ -207,7 +207,10 @@ export function convertobjectToSearchableString(
  *
  * @return String of searchable text
  */
-export function checkTypeOfInput(value: ComboboxObjectValue | string) {
+export function checkTypeOfInput(value?: ComboboxObjectValue | string | null) {
+  if (!value) {
+    return value;
+  }
   if (typeof value === "string") {
     return value;
   } else {

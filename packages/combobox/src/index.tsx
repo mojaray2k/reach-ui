@@ -191,7 +191,9 @@ const reducer: Reducer = (data: StateData, event: MachineEvent) => {
         ...nextState,
         // if controlled, "set" the input to what it already has, and let the
         // user do whatever they want
-        value: event.isControlled ? data.value : event.value,
+        value: event.isControlled
+          ? checkTypeOfInput(data.value)
+          : checkTypeOfInput(event.value),
         navigationValue: null,
       };
     case SELECT_WITH_KEYBOARD:
@@ -199,7 +201,9 @@ const reducer: Reducer = (data: StateData, event: MachineEvent) => {
         ...nextState,
         // if controlled, "set" the input to what it already has, and let the
         // user do whatever they want
-        value: event.isControlled ? data.value : data.navigationValue,
+        value: event.isControlled
+          ? checkTypeOfInput(data.value)
+          : checkTypeOfInput(data.navigationValue),
         navigationValue: null,
       };
     case CLOSE_WITH_BUTTON:
@@ -498,7 +502,7 @@ export const ComboboxInput = React.forwardRef(
 
     let handleValueChange = React.useCallback(
       (value: ComboboxValue) => {
-        if (checkTypeOfInput(value).trim() === "") {
+        if (checkTypeOfInput(value)?.trim() === "") {
           transition(CLEAR, { isControlled });
         } else if (
           checkTypeOfInput(value) === initialControlledValue &&
@@ -574,7 +578,7 @@ export const ComboboxInput = React.forwardRef(
       <Comp
         aria-activedescendant={
           navigationValue
-            ? String(makeHash(checkTypeOfInput(navigationValue)))
+            ? String(makeHash(checkTypeOfInput(navigationValue) || ""))
             : undefined
         }
         aria-autocomplete="both"
@@ -836,7 +840,7 @@ export const ComboboxOption = React.forwardRef(
           {...props}
           data-reach-combobox-option=""
           ref={ref}
-          id={String(makeHash(checkTypeOfInput(value)))}
+          id={String(makeHash(checkTypeOfInput(value) || ""))}
           data-highlighted={isActive ? "" : undefined}
           // Without this the menu will close from `onBlur`, but with it the
           // element can be `document.activeElement` and then our focus checks in
@@ -930,7 +934,7 @@ export function ComboboxOptionText() {
     <>
       {results.length
         ? results.map((result, index) => {
-            let str = checkTypeOfInput(value).slice(result.start, result.end);
+            let str = checkTypeOfInput(value)?.slice(result.start, result.end);
             return (
               <span
                 key={index}
@@ -1216,7 +1220,6 @@ function useReducerMachine(
 ): [State, StateData, Transition] {
   let [state, setState] = React.useState(chart.initial);
   let [data, dispatch] = React.useReducer(reducer, initialData);
-
   let transition: Transition = (event, payload = {}) => {
     let currentState = chart.states[state];
     let nextState = currentState && currentState.on[event];
