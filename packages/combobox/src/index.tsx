@@ -37,7 +37,12 @@ import {
   useDescendants,
   useDescendantsInit,
 } from "@reach/descendants";
-import { checkTypeOfInput, HighlightWords } from "./utils";
+import {
+  checkTypeOfInput,
+  convertObjectToSearchableString,
+  filterObject,
+  HighlightWords,
+} from "./utils";
 import { useId } from "@reach/auto-id";
 import { Popover, positionMatchWidth } from "@reach/popover";
 
@@ -191,9 +196,7 @@ const reducer: Reducer = (data: StateData, event: MachineEvent) => {
         ...nextState,
         // if controlled, "set" the input to what it already has, and let the
         // user do whatever they want
-        value: event.isControlled
-          ? checkTypeOfInput(data.value)
-          : checkTypeOfInput(event.value),
+        value: event.isControlled ? data.value : event.value,
         navigationValue: null,
       };
     case SELECT_WITH_KEYBOARD:
@@ -201,9 +204,7 @@ const reducer: Reducer = (data: StateData, event: MachineEvent) => {
         ...nextState,
         // if controlled, "set" the input to what it already has, and let the
         // user do whatever they want
-        value: event.isControlled
-          ? checkTypeOfInput(data.value)
-          : checkTypeOfInput(data.navigationValue),
+        value: event.isControlled ? data.value : data.navigationValue,
         navigationValue: null,
       };
     case CLOSE_WITH_BUTTON:
@@ -450,7 +451,7 @@ export const ComboboxInput = React.forwardRef(
     }, [controlledValue]);
 
     let {
-      data: { navigationValue, value, lastEventType },
+      data: { navigationValue, value: rawValue, lastEventType },
       inputRef,
       state,
       transition,
@@ -463,11 +464,11 @@ export const ComboboxInput = React.forwardRef(
       persistSelectionRef,
       isControlledRef,
     } = React.useContext(ComboboxContext);
+    const [internalState, setInternalState] = React.useState("");
 
+    const value = convertObjectToSearchableString(rawValue, internalState);
+    // const navigationValue = convertObjectToSearchableString(rawNavigation);
     let ref = useComposedRefs(inputRef, forwardedRef);
-
-    // Because we close the List on blur, we need to track if the blur is
-    // caused by clicking inside the list, and if so, don't close the List.
     let selectOnClickRef = React.useRef(false);
 
     let handleKeyDown = useKeyDown();
@@ -501,11 +502,11 @@ export const ComboboxInput = React.forwardRef(
     }, [autocomplete, autocompletePropRef]);
 
     let handleValueChange = React.useCallback(
-      (value: ComboboxValue) => {
-        if (checkTypeOfInput(value)?.trim() === "") {
+      (value: string) => {
+        if (value.trim() === "") {
           transition(CLEAR, { isControlled });
         } else if (
-          checkTypeOfInput(value) === initialControlledValue &&
+          value === initialControlledValue &&
           !controlledValueChangedRef.current
         ) {
           transition(INITIAL_CHANGE, { value });
@@ -515,7 +516,6 @@ export const ComboboxInput = React.forwardRef(
       },
       [initialControlledValue, transition, isControlled]
     );
-
     React.useEffect(() => {
       // If they are controlling the value we still need to do our transitions,
       // so  we have this derived state to emulate onChange of the input as we
@@ -524,9 +524,7 @@ export const ComboboxInput = React.forwardRef(
         isControlled &&
         controlledValue !== value &&
         // https://github.com/reach/reach-ui/issues/481
-        (controlledValue!.trim() === ""
-          ? (checkTypeOfInput(value as any) || "").trim() !== ""
-          : true)
+        (controlledValue!.trim() === "" ? (value || "").trim() !== "" : true)
       ) {
         handleValueChange(controlledValue!);
       }
@@ -537,6 +535,7 @@ export const ComboboxInput = React.forwardRef(
     // onChange prop
     function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
       let { value } = event.target;
+      setInternalState(value);
       if (!isControlled) {
         handleValueChange(value);
       }
@@ -597,7 +596,7 @@ export const ComboboxInput = React.forwardRef(
         onClick={composeEventHandlers(onClick, handleClick)}
         onFocus={composeEventHandlers(onFocus, handleFocus)}
         onKeyDown={composeEventHandlers(onKeyDown, handleKeyDown)}
-        value={(inputValue as any) || ""}
+        value={convertObjectToSearchableString(inputValue, internalState)}
       />
     );
   }

@@ -10,6 +10,7 @@ import { useCityMatch } from "./utils";
 import "@reach/combobox/styles.css";
 import { ComboboxObjectValue } from "../src";
 import { checkTypeOfInput } from "../src/utils";
+import { values } from "lodash";
 const bookOfMormonHeroes = [
   { primaryText: "Lehi" },
   { primaryText: "Nephi" },
@@ -77,19 +78,19 @@ function Example() {
   };
 
   const handleSelect = (value: ComboboxObjectValue | string) => {
-    setSelection(checkTypeOfInput(value));
+    setSelection(value);
   };
 
   return (
     <div>
       <h2>Clientside Search</h2>
-      <p>Selection: {selection}</p>
+      {/* <p>Selection: {selection}</p> */}
       <p>Term: {term}</p>
       <Combobox onSelect={handleSelect} aria-label="choose a city">
         <ComboboxInput
           ref={ref}
           onChange={handleChange}
-          autocomplete={false}
+          autocomplete={true}
           style={{ width: 400 }}
         />
         {bookOfMormonHeroes && (
@@ -109,16 +110,18 @@ function Example() {
               </p>
             )}
             <ComboboxList>
-              {bookOfMormonHeroes.slice(0, 10).map((result, index) => (
-                <ComboboxOption
-                  key={index}
-                  value={{
-                    key: index,
-                    primaryText: `${result.city}`,
-                    secondaryText: `${result.state}`,
-                  }}
-                />
-              ))}
+              {bookOfMormonHeroes.slice(0, 10).map((result, index) => {
+                return (
+                  <ComboboxOption
+                    key={index}
+                    value={{
+                      key: index,
+                      city: `${result.city}`,
+                      state: `${result.state}`,
+                    }}
+                  />
+                );
+              })}
             </ComboboxList>
             <p>
               <a href="/new">Add a record</a>

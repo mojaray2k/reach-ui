@@ -191,7 +191,7 @@ export interface Chunk {
 export function convertobjectToSearchableString(
   valueObject: ComboboxObjectValue
 ) {
-  const notAllowedkeys = ["key", "id"];
+  const notAllowedkeys = ["key", "id", "_id", "index"];
   const searchWords = Object.entries(valueObject)
     .map((eachArray) => {
       if (!notAllowedkeys.includes(eachArray[0])) {
@@ -203,14 +203,65 @@ export function convertobjectToSearchableString(
   return searchWords;
 }
 /**
+ * Accepts a generic objects
+ * Removes the key or id in the object
+ *
+ * @return Returns object without keys and Id
+ */
+export const filterObject = (val: any) => {
+  const notAllowedkeys = ["key", "id", "_id", "index"];
+  const filtered = Object.keys(val)
+    .filter((key: any) => !notAllowedkeys.includes(key))
+    .reduce((obj: any, key: any) => {
+      return {
+        ...obj,
+        [key]: (val as any)[key],
+      };
+    }, {});
+  return filtered;
+};
+
+/**
+ * Accepts a generic objects
+ * Removes the key or id in the object
+ *
+ * @return String of searchable text
+ */
+export const convertObjectToSearchableString = (
+  valueObject: any,
+  searchWord: string
+) => {
+  if (typeof valueObject === "string") {
+    return valueObject;
+  } else if (typeof valueObject === null) {
+    return "";
+  } else if (typeof valueObject === undefined) {
+    return "";
+  } else {
+    const record = filterObject(valueObject);
+    const searchWords = Object.values(record)
+      .map((eachStr) => {
+        if (
+          String(eachStr)
+            .toLowerCase()
+            .includes(String(searchWord).toLowerCase())
+        ) {
+          return eachStr;
+        }
+        return eachStr;
+      })
+      .join(" ");
+
+    return searchWords;
+  }
+};
+
+/**
  * Accepts an object or a string
  *
  * @return String of searchable text
  */
-export function checkTypeOfInput(value?: ComboboxObjectValue | string | null) {
-  if (!value) {
-    return value;
-  }
+export function checkTypeOfInput(value: ComboboxObjectValue | string) {
   if (typeof value === "string") {
     return value;
   } else {
