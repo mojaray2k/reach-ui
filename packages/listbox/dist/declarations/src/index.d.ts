@@ -35,7 +35,7 @@ import type { PopoverProps } from "@reach/popover";
  *
  * @see Docs https://reach.tech/listbox#listboxinput
  */
-declare const ListboxInput: Polymorphic.ForwardRefComponent<"div", Pick<React.DetailedHTMLProps<React.SelectHTMLAttributes<HTMLSelectElement>, HTMLSelectElement>, "form" | "name" | "required"> & {
+declare const ListboxInput: Polymorphic.ForwardRefComponent<"div", Pick<React.DetailedHTMLProps<React.SelectHTMLAttributes<HTMLSelectElement>, HTMLSelectElement>, "name" | "form" | "required"> & {
     /**
      * The composed listbox expects to receive `ListboxButton` and
      * `ListboxPopover` as children. You can also pass in arbitrary wrapper

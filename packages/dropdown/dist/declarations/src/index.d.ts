@@ -23,12 +23,21 @@ declare function useDropdownTrigger({ onKeyDown, onMouseDown, id, ref: forwarded
         onMouseDown: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => any;
         type: "button";
         children: React.ReactNode;
+        value?: string | number | readonly string[] | undefined;
+        name?: string | undefined;
         onChange?: React.FormEventHandler<HTMLButtonElement> | undefined;
         form?: string | undefined;
         slot?: string | undefined;
         style?: React.CSSProperties | undefined;
         title?: string | undefined;
         key?: React.Key | null | undefined;
+        autoFocus?: boolean | undefined;
+        disabled?: boolean | undefined;
+        formAction?: string | undefined;
+        formEncType?: string | undefined;
+        formMethod?: string | undefined;
+        formNoValidate?: boolean | undefined;
+        formTarget?: string | undefined;
         defaultChecked?: boolean | undefined;
         defaultValue?: string | number | readonly string[] | undefined;
         suppressContentEditableWarning?: boolean | undefined;
@@ -67,7 +76,7 @@ declare function useDropdownTrigger({ onKeyDown, onMouseDown, id, ref: forwarded
         results?: number | undefined;
         security?: string | undefined;
         unselectable?: "on" | "off" | undefined;
-        inputMode?: "text" | "none" | "search" | "tel" | "url" | "email" | "numeric" | "decimal" | undefined;
+        inputMode?: "search" | "text" | "none" | "tel" | "url" | "email" | "numeric" | "decimal" | undefined;
         is?: string | undefined;
         'aria-activedescendant'?: string | undefined;
         'aria-atomic'?: boolean | "true" | "false" | undefined;
@@ -94,7 +103,7 @@ declare function useDropdownTrigger({ onKeyDown, onMouseDown, id, ref: forwarded
         'aria-label'?: string | undefined;
         'aria-labelledby'?: string | undefined;
         'aria-level'?: number | undefined;
-        'aria-live'?: "polite" | "assertive" | "off" | undefined;
+        'aria-live'?: "off" | "assertive" | "polite" | undefined;
         'aria-modal'?: boolean | "true" | "false" | undefined;
         'aria-multiline'?: boolean | "true" | "false" | undefined;
         'aria-multiselectable'?: boolean | "true" | "false" | undefined;
@@ -277,15 +286,6 @@ declare function useDropdownTrigger({ onKeyDown, onMouseDown, id, ref: forwarded
         onAnimationIterationCapture?: React.AnimationEventHandler<HTMLButtonElement> | undefined;
         onTransitionEnd?: React.TransitionEventHandler<HTMLButtonElement> | undefined;
         onTransitionEndCapture?: React.TransitionEventHandler<HTMLButtonElement> | undefined;
-        name?: string | undefined;
-        autoFocus?: boolean | undefined;
-        disabled?: boolean | undefined;
-        formAction?: string | undefined;
-        formEncType?: string | undefined;
-        formMethod?: string | undefined;
-        formNoValidate?: boolean | undefined;
-        formTarget?: string | undefined;
-        value?: string | number | readonly string[] | undefined;
     };
 };
 declare const DropdownTrigger: Polymorphic.ForwardRefComponent<"button", DropdownTriggerProps>;
@@ -313,6 +313,7 @@ declare function useDropdownItem({ index: indexProp, isLink, onClick, onDragStar
         onMouseUp: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => any;
         children: React.ReactNode;
         onChange?: React.FormEventHandler<HTMLDivElement> | undefined;
+        id: string | undefined;
         slot?: string | undefined;
         style?: React.CSSProperties | undefined;
         title?: string | undefined;
@@ -328,7 +329,6 @@ declare function useDropdownItem({ index: indexProp, isLink, onClick, onDragStar
         dir?: string | undefined;
         draggable?: (boolean | "true" | "false") | undefined;
         hidden?: boolean | undefined;
-        id: string | undefined;
         lang?: string | undefined;
         placeholder?: string | undefined;
         spellCheck?: (boolean | "true" | "false") | undefined;
@@ -356,7 +356,7 @@ declare function useDropdownItem({ index: indexProp, isLink, onClick, onDragStar
         results?: number | undefined;
         security?: string | undefined;
         unselectable?: "on" | "off" | undefined;
-        inputMode?: "text" | "none" | "search" | "tel" | "url" | "email" | "numeric" | "decimal" | undefined;
+        inputMode?: "search" | "text" | "none" | "tel" | "url" | "email" | "numeric" | "decimal" | undefined;
         is?: string | undefined;
         'aria-activedescendant'?: string | undefined;
         'aria-atomic'?: boolean | "true" | "false" | undefined;
@@ -383,7 +383,7 @@ declare function useDropdownItem({ index: indexProp, isLink, onClick, onDragStar
         'aria-label'?: string | undefined;
         'aria-labelledby'?: string | undefined;
         'aria-level'?: number | undefined;
-        'aria-live'?: "polite" | "assertive" | "off" | undefined;
+        'aria-live'?: "off" | "assertive" | "polite" | undefined;
         'aria-modal'?: boolean | "true" | "false" | undefined;
         'aria-multiline'?: boolean | "true" | "false" | undefined;
         'aria-multiselectable'?: boolean | "true" | "false" | undefined;
@@ -628,7 +628,7 @@ declare function useDropdownItems({ id, onKeyDown, ref: forwardedRef, ...props }
         results?: number | undefined;
         security?: string | undefined;
         unselectable?: "on" | "off" | undefined;
-        inputMode?: "text" | "none" | "search" | "tel" | "url" | "email" | "numeric" | "decimal" | undefined;
+        inputMode?: "search" | "text" | "none" | "tel" | "url" | "email" | "numeric" | "decimal" | undefined;
         is?: string | undefined;
         'aria-activedescendant'?: string | undefined;
         'aria-atomic'?: boolean | "true" | "false" | undefined;
@@ -655,7 +655,7 @@ declare function useDropdownItems({ id, onKeyDown, ref: forwardedRef, ...props }
         'aria-label'?: string | undefined;
         'aria-labelledby'?: string | undefined;
         'aria-level'?: number | undefined;
-        'aria-live'?: "polite" | "assertive" | "off" | undefined;
+        'aria-live'?: "off" | "assertive" | "polite" | undefined;
         'aria-modal'?: boolean | "true" | "false" | undefined;
         'aria-multiline'?: boolean | "true" | "false" | undefined;
         'aria-multiselectable'?: boolean | "true" | "false" | undefined;
@@ -860,6 +860,7 @@ declare function useDropdownPopover({ onBlur, portal, position, ref: forwardedRe
     props: {
         children: React.ReactNode;
         onChange?: React.FormEventHandler<HTMLDivElement> | undefined;
+        id?: string | undefined;
         slot?: string | undefined;
         style?: React.CSSProperties | undefined;
         title?: string | undefined;
@@ -875,7 +876,6 @@ declare function useDropdownPopover({ onBlur, portal, position, ref: forwardedRe
         dir?: string | undefined;
         draggable?: (boolean | "true" | "false") | undefined;
         hidden: boolean;
-        id?: string | undefined;
         lang?: string | undefined;
         placeholder?: string | undefined;
         spellCheck?: (boolean | "true" | "false") | undefined;
@@ -903,7 +903,7 @@ declare function useDropdownPopover({ onBlur, portal, position, ref: forwardedRe
         results?: number | undefined;
         security?: string | undefined;
         unselectable?: "on" | "off" | undefined;
-        inputMode?: "text" | "none" | "search" | "tel" | "url" | "email" | "numeric" | "decimal" | undefined;
+        inputMode?: "search" | "text" | "none" | "tel" | "url" | "email" | "numeric" | "decimal" | undefined;
         is?: string | undefined;
         'aria-activedescendant'?: string | undefined;
         'aria-atomic'?: boolean | "true" | "false" | undefined;
@@ -930,7 +930,7 @@ declare function useDropdownPopover({ onBlur, portal, position, ref: forwardedRe
         'aria-label'?: string | undefined;
         'aria-labelledby'?: string | undefined;
         'aria-level'?: number | undefined;
-        'aria-live'?: "polite" | "assertive" | "off" | undefined;
+        'aria-live'?: "off" | "assertive" | "polite" | undefined;
         'aria-modal'?: boolean | "true" | "false" | undefined;
         'aria-multiline'?: boolean | "true" | "false" | undefined;
         'aria-multiselectable'?: boolean | "true" | "false" | undefined;
