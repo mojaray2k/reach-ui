@@ -23,11 +23,11 @@ declare function useDropdownTrigger({ onKeyDown, onMouseDown, id, ref: forwarded
         onMouseDown: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => any;
         type: "button";
         children: React.ReactNode;
+        onChange?: React.FormEventHandler<HTMLButtonElement> | undefined;
         form?: string | undefined;
         slot?: string | undefined;
         style?: React.CSSProperties | undefined;
         title?: string | undefined;
-        dir?: string | undefined;
         key?: React.Key | null | undefined;
         defaultChecked?: boolean | undefined;
         defaultValue?: string | number | readonly string[] | undefined;
@@ -37,6 +37,7 @@ declare function useDropdownTrigger({ onKeyDown, onMouseDown, id, ref: forwarded
         className?: string | undefined;
         contentEditable?: (boolean | "true" | "false") | "inherit" | undefined;
         contextMenu?: string | undefined;
+        dir?: string | undefined;
         draggable?: (boolean | "true" | "false") | undefined;
         hidden?: boolean | undefined;
         lang?: string | undefined;
@@ -93,7 +94,7 @@ declare function useDropdownTrigger({ onKeyDown, onMouseDown, id, ref: forwarded
         'aria-label'?: string | undefined;
         'aria-labelledby'?: string | undefined;
         'aria-level'?: number | undefined;
-        'aria-live'?: "off" | "assertive" | "polite" | undefined;
+        'aria-live'?: "polite" | "assertive" | "off" | undefined;
         'aria-modal'?: boolean | "true" | "false" | undefined;
         'aria-multiline'?: boolean | "true" | "false" | undefined;
         'aria-multiselectable'?: boolean | "true" | "false" | undefined;
@@ -135,7 +136,6 @@ declare function useDropdownTrigger({ onKeyDown, onMouseDown, id, ref: forwarded
         onFocusCapture?: React.FocusEventHandler<HTMLButtonElement> | undefined;
         onBlur?: React.FocusEventHandler<HTMLButtonElement> | undefined;
         onBlurCapture?: React.FocusEventHandler<HTMLButtonElement> | undefined;
-        onChange?: React.FormEventHandler<HTMLButtonElement> | undefined;
         onChangeCapture?: React.FormEventHandler<HTMLButtonElement> | undefined;
         onBeforeInput?: React.FormEventHandler<HTMLButtonElement> | undefined;
         onBeforeInputCapture?: React.FormEventHandler<HTMLButtonElement> | undefined;
@@ -277,7 +277,6 @@ declare function useDropdownTrigger({ onKeyDown, onMouseDown, id, ref: forwarded
         onAnimationIterationCapture?: React.AnimationEventHandler<HTMLButtonElement> | undefined;
         onTransitionEnd?: React.TransitionEventHandler<HTMLButtonElement> | undefined;
         onTransitionEndCapture?: React.TransitionEventHandler<HTMLButtonElement> | undefined;
-        value?: string | number | readonly string[] | undefined;
         name?: string | undefined;
         autoFocus?: boolean | undefined;
         disabled?: boolean | undefined;
@@ -286,6 +285,7 @@ declare function useDropdownTrigger({ onKeyDown, onMouseDown, id, ref: forwarded
         formMethod?: string | undefined;
         formNoValidate?: boolean | undefined;
         formTarget?: string | undefined;
+        value?: string | number | readonly string[] | undefined;
     };
 };
 declare const DropdownTrigger: Polymorphic.ForwardRefComponent<"button", DropdownTriggerProps>;
@@ -312,10 +312,10 @@ declare function useDropdownItem({ index: indexProp, isLink, onClick, onDragStar
         onFocus: (event: React.FocusEvent<HTMLDivElement>) => any;
         onMouseUp: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => any;
         children: React.ReactNode;
+        onChange?: React.FormEventHandler<HTMLDivElement> | undefined;
         slot?: string | undefined;
         style?: React.CSSProperties | undefined;
         title?: string | undefined;
-        dir?: string | undefined;
         key?: React.Key | null | undefined;
         defaultChecked?: boolean | undefined;
         defaultValue?: string | number | readonly string[] | undefined;
@@ -325,6 +325,7 @@ declare function useDropdownItem({ index: indexProp, isLink, onClick, onDragStar
         className?: string | undefined;
         contentEditable?: (boolean | "true" | "false") | "inherit" | undefined;
         contextMenu?: string | undefined;
+        dir?: string | undefined;
         draggable?: (boolean | "true" | "false") | undefined;
         hidden?: boolean | undefined;
         id: string | undefined;
@@ -382,7 +383,7 @@ declare function useDropdownItem({ index: indexProp, isLink, onClick, onDragStar
         'aria-label'?: string | undefined;
         'aria-labelledby'?: string | undefined;
         'aria-level'?: number | undefined;
-        'aria-live'?: "off" | "assertive" | "polite" | undefined;
+        'aria-live'?: "polite" | "assertive" | "off" | undefined;
         'aria-modal'?: boolean | "true" | "false" | undefined;
         'aria-multiline'?: boolean | "true" | "false" | undefined;
         'aria-multiselectable'?: boolean | "true" | "false" | undefined;
@@ -423,7 +424,6 @@ declare function useDropdownItem({ index: indexProp, isLink, onClick, onDragStar
         onFocusCapture?: React.FocusEventHandler<HTMLDivElement> | undefined;
         onBlur?: React.FocusEventHandler<HTMLDivElement> | undefined;
         onBlurCapture?: React.FocusEventHandler<HTMLDivElement> | undefined;
-        onChange?: React.FormEventHandler<HTMLDivElement> | undefined;
         onChangeCapture?: React.FormEventHandler<HTMLDivElement> | undefined;
         onBeforeInput?: React.FormEventHandler<HTMLDivElement> | undefined;
         onBeforeInputCapture?: React.FormEventHandler<HTMLDivElement> | undefined;
@@ -585,10 +585,10 @@ declare function useDropdownItems({ id, onKeyDown, ref: forwardedRef, ...props }
         id: string | undefined;
         onKeyDown: (event: React.KeyboardEvent<HTMLDivElement>) => any;
         children: React.ReactNode;
+        onChange?: React.FormEventHandler<HTMLDivElement> | undefined;
         slot?: string | undefined;
         style?: React.CSSProperties | undefined;
         title?: string | undefined;
-        dir?: string | undefined;
         key?: React.Key | null | undefined;
         defaultChecked?: boolean | undefined;
         defaultValue?: string | number | readonly string[] | undefined;
@@ -598,6 +598,7 @@ declare function useDropdownItems({ id, onKeyDown, ref: forwardedRef, ...props }
         className?: string | undefined;
         contentEditable?: (boolean | "true" | "false") | "inherit" | undefined;
         contextMenu?: string | undefined;
+        dir?: string | undefined;
         draggable?: (boolean | "true" | "false") | undefined;
         hidden?: boolean | undefined;
         lang?: string | undefined;
@@ -654,7 +655,7 @@ declare function useDropdownItems({ id, onKeyDown, ref: forwardedRef, ...props }
         'aria-label'?: string | undefined;
         'aria-labelledby'?: string | undefined;
         'aria-level'?: number | undefined;
-        'aria-live'?: "off" | "assertive" | "polite" | undefined;
+        'aria-live'?: "polite" | "assertive" | "off" | undefined;
         'aria-modal'?: boolean | "true" | "false" | undefined;
         'aria-multiline'?: boolean | "true" | "false" | undefined;
         'aria-multiselectable'?: boolean | "true" | "false" | undefined;
@@ -696,7 +697,6 @@ declare function useDropdownItems({ id, onKeyDown, ref: forwardedRef, ...props }
         onFocusCapture?: React.FocusEventHandler<HTMLDivElement> | undefined;
         onBlur?: React.FocusEventHandler<HTMLDivElement> | undefined;
         onBlurCapture?: React.FocusEventHandler<HTMLDivElement> | undefined;
-        onChange?: React.FormEventHandler<HTMLDivElement> | undefined;
         onChangeCapture?: React.FormEventHandler<HTMLDivElement> | undefined;
         onBeforeInput?: React.FormEventHandler<HTMLDivElement> | undefined;
         onBeforeInputCapture?: React.FormEventHandler<HTMLDivElement> | undefined;
@@ -859,10 +859,10 @@ declare function useDropdownPopover({ onBlur, portal, position, ref: forwardedRe
     };
     props: {
         children: React.ReactNode;
+        onChange?: React.FormEventHandler<HTMLDivElement> | undefined;
         slot?: string | undefined;
         style?: React.CSSProperties | undefined;
         title?: string | undefined;
-        dir?: string | undefined;
         key?: React.Key | null | undefined;
         defaultChecked?: boolean | undefined;
         defaultValue?: string | number | readonly string[] | undefined;
@@ -872,6 +872,7 @@ declare function useDropdownPopover({ onBlur, portal, position, ref: forwardedRe
         className?: string | undefined;
         contentEditable?: (boolean | "true" | "false") | "inherit" | undefined;
         contextMenu?: string | undefined;
+        dir?: string | undefined;
         draggable?: (boolean | "true" | "false") | undefined;
         hidden: boolean;
         id?: string | undefined;
@@ -929,7 +930,7 @@ declare function useDropdownPopover({ onBlur, portal, position, ref: forwardedRe
         'aria-label'?: string | undefined;
         'aria-labelledby'?: string | undefined;
         'aria-level'?: number | undefined;
-        'aria-live'?: "off" | "assertive" | "polite" | undefined;
+        'aria-live'?: "polite" | "assertive" | "off" | undefined;
         'aria-modal'?: boolean | "true" | "false" | undefined;
         'aria-multiline'?: boolean | "true" | "false" | undefined;
         'aria-multiselectable'?: boolean | "true" | "false" | undefined;
@@ -970,7 +971,6 @@ declare function useDropdownPopover({ onBlur, portal, position, ref: forwardedRe
         onFocus?: React.FocusEventHandler<HTMLDivElement> | undefined;
         onFocusCapture?: React.FocusEventHandler<HTMLDivElement> | undefined;
         onBlurCapture?: React.FocusEventHandler<HTMLDivElement> | undefined;
-        onChange?: React.FormEventHandler<HTMLDivElement> | undefined;
         onChangeCapture?: React.FormEventHandler<HTMLDivElement> | undefined;
         onBeforeInput?: React.FormEventHandler<HTMLDivElement> | undefined;
         onBeforeInputCapture?: React.FormEventHandler<HTMLDivElement> | undefined;
