@@ -18,7 +18,6 @@ pids
 /doc.json
 
 # bundled files
-/packages/*/**/dist
 /packages/*/errors
 
 # editor specific
