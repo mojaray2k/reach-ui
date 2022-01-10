@@ -37,7 +37,11 @@ import {
   useDescendants,
   useDescendantsInit,
 } from "@reach/descendants";
-import { HighlightWords } from "./utils";
+import {
+  checkTypeOfInput,
+  convertObjectToSearchableString,
+  HighlightWords,
+} from "./utils";
 import { useId } from "@reach/auto-id";
 import { Popover, positionMatchWidth } from "@reach/popover";
 
@@ -317,8 +321,8 @@ export const Combobox = React.forwardRef(
 
     let id = useId(props.id);
     let listboxId = id ? makeId("listbox", id) : "listbox";
+
     let isControlledRef = React.useRef<boolean>(false);
-    let isExpanded = popoverIsExpanded(state);
 
     let context: InternalComboboxContextValue = {
       ariaLabel,
@@ -328,7 +332,7 @@ export const Combobox = React.forwardRef(
       comboboxId: id,
       data,
       inputRef,
-      isExpanded,
+      isExpanded: popoverIsExpanded(state),
       listboxId,
       onSelect: onSelect || noop,
       openOnFocus,
@@ -352,13 +356,12 @@ export const Combobox = React.forwardRef(
             {...props}
             data-reach-combobox=""
             data-state={getDataState(state)}
-            data-expanded={isExpanded || undefined}
             ref={forwardedRef}
           >
             {isFunction(children)
               ? children({
                   id,
-                  isExpanded,
+                  isExpanded: popoverIsExpanded(state),
                   navigationValue: data.navigationValue ?? null,
                   state,
                 })
@@ -447,7 +450,7 @@ export const ComboboxInput = React.forwardRef(
     }, [controlledValue]);
 
     let {
-      data: { navigationValue, value, lastEventType },
+      data: { navigationValue, value: rawValue, lastEventType },
       inputRef,
       state,
       transition,
@@ -460,11 +463,11 @@ export const ComboboxInput = React.forwardRef(
       persistSelectionRef,
       isControlledRef,
     } = React.useContext(ComboboxContext);
+    const [internalState, setInternalState] = React.useState("");
 
+    const value = convertObjectToSearchableString(rawValue, internalState);
+    // const navigationValue = convertObjectToSearchableString(rawNavigation);
     let ref = useComposedRefs(inputRef, forwardedRef);
-
-    // Because we close the List on blur, we need to track if the blur is
-    // caused by clicking inside the list, and if so, don't close the List.
     let selectOnClickRef = React.useRef(false);
 
     let handleKeyDown = useKeyDown();
@@ -498,7 +501,7 @@ export const ComboboxInput = React.forwardRef(
     }, [autocomplete, autocompletePropRef]);
 
     let handleValueChange = React.useCallback(
-      (value: ComboboxValue) => {
+      (value: string) => {
         if (value.trim() === "") {
           transition(CLEAR, { isControlled });
         } else if (
@@ -512,7 +515,6 @@ export const ComboboxInput = React.forwardRef(
       },
       [initialControlledValue, transition, isControlled]
     );
-
     React.useEffect(() => {
       // If they are controlling the value we still need to do our transitions,
       // so  we have this derived state to emulate onChange of the input as we
@@ -532,6 +534,7 @@ export const ComboboxInput = React.forwardRef(
     // onChange prop
     function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
       let { value } = event.target;
+      setInternalState(value);
       if (!isControlled) {
         handleValueChange(value);
       }
@@ -572,7 +575,9 @@ export const ComboboxInput = React.forwardRef(
     return (
       <Comp
         aria-activedescendant={
-          navigationValue ? String(makeHash(navigationValue)) : undefined
+          navigationValue
+            ? String(makeHash(checkTypeOfInput(navigationValue) || ""))
+            : undefined
         }
         aria-autocomplete="both"
         aria-controls={listboxId}
@@ -590,7 +595,7 @@ export const ComboboxInput = React.forwardRef(
         onClick={composeEventHandlers(onClick, handleClick)}
         onFocus={composeEventHandlers(onFocus, handleFocus)}
         onKeyDown={composeEventHandlers(onKeyDown, handleKeyDown)}
-        value={inputValue || ""}
+        value={convertObjectToSearchableString(inputValue, internalState)}
       />
     );
   }
@@ -628,7 +633,7 @@ export interface ComboboxInputProps {
   /**
    * @see Docs https://reach.tech/combobox#comboboxinput-value
    */
-  value?: ComboboxValue;
+  value?: string;
 }
 
 if (__DEV__) {
@@ -685,7 +690,6 @@ export const ComboboxPopover = React.forwardRef(
         as={Comp}
         {...props}
         ref={ref}
-        data-expanded={isExpanded || undefined}
         position={position}
         targetRef={inputRef}
         {...sharedProps}
@@ -801,7 +805,6 @@ export const ComboboxOption = React.forwardRef(
       transition,
       isControlledRef,
     } = React.useContext(ComboboxContext);
-
     let ownRef = React.useRef<HTMLElement | null>(null);
 
     let [element, handleRefSet] = useStatefulRefValue<HTMLElement | null>(
@@ -827,7 +830,6 @@ export const ComboboxOption = React.forwardRef(
         isControlled: isControlledRef.current,
       });
     };
-
     return (
       <OptionContext.Provider value={{ value, index }}>
         <Comp
@@ -836,7 +838,7 @@ export const ComboboxOption = React.forwardRef(
           {...props}
           data-reach-combobox-option=""
           ref={ref}
-          id={String(makeHash(value))}
+          id={String(makeHash(checkTypeOfInput(value) || ""))}
           data-highlighted={isActive ? "" : undefined}
           // Without this the menu will close from `onBlur`, but with it the
           // element can be `document.activeElement` and then our focus checks in
@@ -889,13 +891,12 @@ export interface ComboboxOptionProps {
    *
    * @see Docs https://reach.tech/combobox#comboboxoption-value
    */
-  value: string;
+  value: ComboboxValue;
 }
 
 if (__DEV__) {
   ComboboxOption.displayName = "ComboboxOption";
 }
-
 ////////////////////////////////////////////////////////////////////////////////
 
 /**
@@ -919,21 +920,19 @@ export function ComboboxOptionText() {
   let {
     data: { value: contextValue },
   } = React.useContext(ComboboxContext);
-
   let results = React.useMemo(
     () =>
       HighlightWords.findAll({
-        searchWords: escapeRegexp(contextValue || "").split(/\s+/),
-        textToHighlight: value,
+        searchWords: escapeRegexp(checkTypeOfInput(value) || "").split(/\s+/),
+        textToHighlight: checkTypeOfInput(value),
       }),
     [contextValue, value]
   );
-
   return (
     <>
       {results.length
         ? results.map((result, index) => {
-            let str = value.slice(result.start, result.end);
+            let str = checkTypeOfInput(value)?.slice(result.start, result.end);
             return (
               <span
                 key={index}
@@ -1219,7 +1218,6 @@ function useReducerMachine(
 ): [State, StateData, Transition] {
   let [state, setState] = React.useState(chart.initial);
   let [data, dispatch] = React.useReducer(reducer, initialData);
-
   let transition: Transition = (event, payload = {}) => {
     let currentState = chart.states[state];
     let nextState = currentState && currentState.on[event];
@@ -1369,7 +1367,11 @@ interface InternalComboboxContextValue {
 
 type Transition = (event: MachineEventType, payload?: any) => any;
 
-type ComboboxValue = string;
+export interface ComboboxObjectValue {
+  [prop: string]: string | number;
+}
+
+export type ComboboxValue = string | ComboboxObjectValue;
 
 type State = "IDLE" | "SUGGESTING" | "NAVIGATING" | "INTERACTING";
 

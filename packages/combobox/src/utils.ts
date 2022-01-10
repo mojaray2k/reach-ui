@@ -1,5 +1,7 @@
 // Forked from https://github.com/bvaughn/highlight-words-core
 
+import { ComboboxObjectValue } from ".";
+
 /**
  * Creates an array of chunk objects representing both higlightable and non
  * highlightable pieces of text that match each search word.
@@ -178,4 +180,86 @@ export interface Chunk {
   highlight: boolean;
   start: number;
   end: number;
+}
+
+/**
+ * Accepts a generic objects
+ * Removes the key or id in the object
+ *
+ * @return String of searchable text
+ */
+export function convertobjectToSearchableString(
+  valueObject: ComboboxObjectValue
+) {
+  const notAllowedkeys = ["key", "id", "_id", "index"];
+  const searchWords = Object.entries(valueObject)
+    .map((eachArray) => {
+      if (!notAllowedkeys.includes(eachArray[0])) {
+        return eachArray[1];
+      }
+    })
+    .join(" ");
+
+  return searchWords;
+}
+/**
+ * Accepts a generic objects
+ * Removes the key or id in the object
+ *
+ * @return Returns object without keys and Id
+ */
+export const filterObject = (val: any) => {
+  const notAllowedkeys = ["key", "id", "_id", "index"];
+  const filtered = Object.keys(val)
+    .filter((key: any) => !notAllowedkeys.includes(key))
+    .reduce((obj: any, key: any) => {
+      return {
+        ...obj,
+        [key]: (val as any)[key],
+      };
+    }, {});
+  return filtered;
+};
+
+/**
+ * Accepts a generic objects
+ * Removes the key or id in the object
+ *
+ * @return String of searchable text
+ */
+export const convertObjectToSearchableString = (
+  valueObject: any,
+  searchWord: string
+) => {
+  if (typeof valueObject === "string") {
+    return valueObject;
+  } else if (typeof valueObject === null) {
+    return "";
+  } else if (typeof valueObject === undefined) {
+    return "";
+  } else {
+    const record = filterObject(valueObject);
+    const searchWords = Object.values(record).map((eachStr) => {
+      if (
+        String(eachStr).toLowerCase().includes(String(searchWord).toLowerCase())
+      ) {
+        return eachStr;
+      }
+      return eachStr;
+    })[0];
+    return searchWords;
+  }
+};
+
+/**
+ * Accepts an object or a string
+ *
+ * @return String of searchable text
+ */
+export function checkTypeOfInput(value: ComboboxObjectValue | string) {
+  if (typeof value === "string") {
+    return value;
+  } else {
+    return convertobjectToSearchableString(value);
+  }
 }
