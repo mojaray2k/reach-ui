@@ -239,19 +239,14 @@ export const convertObjectToSearchableString = (
     return "";
   } else {
     const record = filterObject(valueObject);
-    const searchWords = Object.values(record)
-      .map((eachStr) => {
-        if (
-          String(eachStr)
-            .toLowerCase()
-            .includes(String(searchWord).toLowerCase())
-        ) {
-          return eachStr;
-        }
+    const searchWords = Object.values(record).map((eachStr) => {
+      if (
+        String(eachStr).toLowerCase().includes(String(searchWord).toLowerCase())
+      ) {
         return eachStr;
-      })
-      .join(" ");
-
+      }
+      return eachStr;
+    })[0];
     return searchWords;
   }
 };

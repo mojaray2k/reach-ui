@@ -98,7 +98,6 @@ function Example({
 
   const handleSelect = (value: ComboboxObjectValue | string) => {
     // setSelection(value);
-    console.log("Hello", value);
   };
   let displaySuggestions = [...controlsSuggestions];
   if (!noFilter && term) {
@@ -139,8 +138,8 @@ function Example({
         <ComboboxInput
           ref={ref}
           onChange={handleChange}
-          autocomplete={true}
           style={{ width: 400 }}
+          autocomplete={false}
         />
         {displaySuggestions && (
           <ComboboxPopover>

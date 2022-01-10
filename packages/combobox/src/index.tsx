@@ -40,7 +40,6 @@ import {
 import {
   checkTypeOfInput,
   convertObjectToSearchableString,
-  filterObject,
   HighlightWords,
 } from "./utils";
 import { useId } from "@reach/auto-id";
